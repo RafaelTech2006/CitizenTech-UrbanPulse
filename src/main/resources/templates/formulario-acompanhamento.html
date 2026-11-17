@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>UrbanPulse - Formulário de Acompanhamento</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title mb-4">Cadastro de Acompanhamento</h3>
+
+          <form th:action="${acao != null} ? ${acao} : @{/acompanhamentos}" method="post">
+
+            <div class="mb-3">
+              <label for="ocorrenciaCodigo" class="form-label">Ocorrência</label>
+              <select class="form-select" id="ocorrenciaCodigo" name="ocorrenciaCodigo" required>
+                <option value="">Selecione a ocorrência...</option>
+                <option th:each="o : ${ocorrencias}"
+                        th:value="${o.codigo}"
+                        th:text="${o.titulo}"
+                        th:selected="${acompanhamento != null and acompanhamento.ocorrencia != null and acompanhamento.ocorrencia.codigo == o.codigo}">
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="etapa" class="form-label">Etapa</label>
+              <select class="form-select" id="etapa" name="etapa" required>
+                <option value="Em análise" th:selected="${acompanhamento?.etapa == 'Em análise'}">Em análise</option>
+                <option value="Equipe em deslocamento" th:selected="${acompanhamento?.etapa == 'Equipe em deslocamento'}">Equipe em deslocamento</option>
+                <option value="Concluído" th:selected="${acompanhamento?.etapa == 'Concluído'}">Concluído</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="responsavel" class="form-label">Responsável</label>
+              <input type="text" class="form-control" id="responsavel" name="responsavel" th:value="${acompanhamento?.responsavel}">
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <a href="/acompanhamentos" class="btn btn-secondary">Cancelar</a>
+              <button type="submit" class="btn btn-success">Salvar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

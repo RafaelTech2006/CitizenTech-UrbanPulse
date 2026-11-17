@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>UrbanPulse - Lista de Acompanhamentos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestão de Acompanhamentos</h2>
+    <div>
+      <a href="/" class="btn btn-outline-secondary me-2">Início</a>
+      <a href="/acompanhamentos/novo" class="btn btn-primary">Novo Acompanhamento</a>
+      <a href="/ocorrencias" class="btn btn-secondary">Ocorrências</a>
+      <a href="/usuarios" class="btn btn-info text-white">Usuários</a>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+        <tr>
+          <th>Código</th>
+          <th>Ocorrência</th>
+          <th>Etapa</th>
+          <th>Responsável</th>
+          <th class="text-center">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="a : ${acompanhamentos}">
+          <td th:text="${a.codigo}">1</td>
+          <td th:text="${a.ocorrencia?.titulo}">Título da Ocorrência</td>
+          <td th:text="${a.etapa}">Etapa</td>
+          <td th:text="${a.responsavel}">Responsável</td>
+          <td class="text-center">
+            <a th:href="@{/acompanhamentos/editar/{codigo}(codigo=${a.codigo})}" class="btn btn-sm btn-warning">Editar</a>
+            <a th:href="@{/acompanhamentos/excluir/{codigo}(codigo=${a.codigo})}" class="btn btn-sm btn-danger" onclick="return confirm('Deseja realmente excluir este acompanhamento?')">Excluir</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

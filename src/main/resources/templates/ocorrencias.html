@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>UrbanPulse - Lista de Ocorrências</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestão de Ocorrências</h2>
+    <div>
+      <a href="/" class="btn btn-outline-secondary me-2">Início</a>
+      <a href="/ocorrencias/novo" class="btn btn-primary">Nova Ocorrência</a>
+      <a href="/usuarios" class="btn btn-secondary">Usuários</a>
+      <a href="/acompanhamentos" class="btn btn-info text-white">Acompanhamentos</a>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+        <tr>
+          <th>Código</th>
+          <th>Título</th>
+          <th>Categoria</th>
+          <th>Descrição</th>
+          <th>Endereço</th>
+          <th>Autor</th>
+          <th>Status</th>
+          <th class="text-center">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="o : ${ocorrencias}">
+          <td th:text="${o.codigo}">1</td>
+          <td th:text="${o.titulo}">Título</td>
+          <td th:text="${o.categoria}">Categoria</td>
+          <td th:text="${o.descricao}">Descrição da Ocorrência</td>
+          <td th:text="${o.endereco}">Endereço</td>
+          <td th:text="${o.usuario?.nome}">Nome do Usuário</td>
+          <td>
+            <span class="badge bg-secondary" th:text="${o.status}">ABERTA</span>
+          </td>
+          <td class="text-center">
+
+            <button type="button" class="btn btn-sm btn-info text-white" data-bs-toggle="modal"
+                    th:data-bs-target="'#modalDetalhes' + ${o.codigo}">
+              Visualizar
+            </button>
+            <a th:href="@{/ocorrencias/editar/{codigo}(codigo=${o.codigo})}" class="btn btn-sm btn-warning">Editar</a>
+            <a th:href="@{/ocorrencias/excluir/{codigo}(codigo=${o.codigo})}" class="btn btn-sm btn-danger" onclick="return confirm('Deseja realmente excluir esta ocorrência?')">Excluir</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div th:each="o : ${ocorrencias}">
+  <div class="modal fade" th:id="'modalDetalhes' + ${o.codigo}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title" th:text="'Detalhes da Ocorrência #' + ${o.codigo}">Detalhes</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Título:</strong> <span th:text="${o.titulo}"></span></p>
+              <p><strong>Categoria:</strong> <span th:text="${o.categoria}"></span></p>
+              <p><strong>Status:</strong> <span th:text="${o.status}" class="badge bg-secondary"></span></p>
+              <p><strong>Endereço:</strong> <span th:text="${o.endereco}"></span></p>
+              <p><strong>Autor:</strong> <span th:text="${o.usuario?.nome}"></span></p>
+              <p><strong>Descrição:</strong></p>
+              <p class="text-muted" th:text="${o.descricao}"></p>
+            </div>
+            <div class="col-md-6 text-center">
+              <p><strong>Foto (Antes):</strong></p>
+              <div th:if="${o.fotoAntesUrl != null and !o.fotoAntesUrl.isEmpty()}">
+                <img th:src="${o.fotoAntesUrl}" alt="Foto da Ocorrência" class="img-fluid rounded shadow-sm" style="max-height: 250px; object-fit: cover;"/>
+              </div>
+              <div th:if="${o.fotoAntesUrl == null or o.fotoAntesUrl.isEmpty()}" class="text-muted fst-italic">
+                Nenhuma foto cadastrada para esta ocorrência.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
